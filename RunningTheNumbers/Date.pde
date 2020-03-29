@@ -5,8 +5,6 @@ public class Date implements Comparable
   private int year;
   private float comparable;
   
-  private Util helper = new Util();
-  
   public Date(int month, int day, int year)
   {
     this.month = month;
@@ -43,7 +41,7 @@ public class Date implements Comparable
   {
     comparable = year;
     
-    float days = day + helper.monthToDays[month - 2];
+    float days = day + HELPER.monthToDays[month - 2];
     
     comparable += (days / 365);
     

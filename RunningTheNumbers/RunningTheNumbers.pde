@@ -1,5 +1,5 @@
 /*
-Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 7hrs.
+Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 9hrs.
 This project is my own work, D.S.
 This program is an interactive visualization tool for cross country team statistics across multiple years. Programmed for Cedar Crest Cross Country.
 */
@@ -23,7 +23,7 @@ Parsing screen.
 
 //Overall window dimensions.
 final int WIDTH = 1200;
-final int HEIGHT = 600;
+final int HEIGHT = 800;
 
 //Coordinates of top-left corner of the performance chart.
 final int CHARTX = 75;
@@ -36,6 +36,9 @@ final float CHARTY_MULTIPLIER = .5;
 //Text font sizes.
 final int LABEL_SIZE = 14;
 final int TITLE_SIZE = 32;
+
+//Button Curviness
+final float BUTTON_CURVE = 5;
 
 final Util HELPER = new Util();
 
@@ -56,10 +59,13 @@ float timeIncrement = HELPER.parseTime("00:30");
 //Dark mode initial color scheme.
 boolean darkMode = true;
 color backgroundColor = #202020;
-color pageElementColor = #8f8f8f;
+color elementColor = #8f8f8f;
+color textColor = #cccccc;
+
+AllDrawn drawn = new AllDrawn();
 
 /*
-//Light mode initial color scheme.
+Light mode initial color scheme.
 boolean darkMode = false;
 color backgroundColor = #bbbbbb;
 color pageElementColor = #000000;
@@ -68,14 +74,29 @@ color pageElementColor = #000000;
 //Sets basic values of the sketch before it runs.
 void setup()
 {
-  size(1200, 600);
+  
+  drawn.addDrawn(new Button(100, HEIGHT - 125, 100, 25, elementColor, "Color Mode", 12, textColor, new Runnable(){ public void run(){ switchColors(); }}));
+  drawn.addDrawn(new Graph(CHARTX, CHARTY, WIDTH * CHARTX_MULTIPLIER, HEIGHT * CHARTY_MULTIPLIER, elementColor, LABEL_SIZE, textColor));
+  size(1200, 800);
 }
 
 //Ticks, displaying the current program page.
 void draw()
 {
   background(backgroundColor);
-  chartSetup();
+  drawn.update();
+  drawn.display();
+}
+
+void mousePressed()
+{
+  for(Drawn d: drawn.getAllDrawn())
+  {  
+    if(d instanceof Button)
+    {
+      ((Button) d).clicked();
+    }
+  }
 }
 
 //Switches the color scheme from dark mode to light mode or from light mode to dark mode. Called by a toggle button press.
@@ -85,44 +106,14 @@ void switchColors()
   {
     darkMode = false;
     backgroundColor = #ffffff;
-    pageElementColor = #000000;
+    textColor = #000000;
   }
   else
   {
     darkMode = true;
     backgroundColor = #202020;
-    pageElementColor = #8f8f8f;
-  }
-}
-
-//Draws the chart on which the running data is displayed.
-void chartSetup()
-{
-  stroke(pageElementColor);
-  textAlign(CENTER);
-  textSize(LABEL_SIZE);
-  
-  //Vertical lines on the chart, each corresponding to a year value displayed on the bottom.
-  float offset = (WIDTH * CHARTX_MULTIPLIER) / (endYear - startYear + 2);
-  for(int i = 0; i <= endYear - startYear; i++)
-  {
-    line(CHARTX + offset * (i + 1), CHARTY, CHARTX + offset * (i + 1), HEIGHT * CHARTY_MULTIPLIER + CHARTY);
-    text(startYear + i, CHARTX + offset * (i + 1), HEIGHT * CHARTY_MULTIPLIER + CHARTY + 25); 
+    textColor = #ffffff;
   }
   
-  //Horizontal lines on the chart, each corresponding to a time value displayed on the lefthand side.
-  offset = (HEIGHT * CHARTY_MULTIPLIER) * timeIncrement / (slowTime - fastTime);
-  for(int i = 0; i <= (slowTime - fastTime) / timeIncrement; i++)
-  {
-    HELPER.dottedLine(CHARTX, CHARTY + offset * i, WIDTH * CHARTX_MULTIPLIER + CHARTX, CHARTY + offset * i);
-    text(HELPER.constructTime(slowTime - timeIncrement * i), CHARTX - 30, CHARTY + offset * i + LABEL_SIZE * .5); 
-  }
-  
-  //Vertical lines on the two sides of the chart.
-  line(CHARTX, CHARTY, CHARTX, HEIGHT * CHARTY_MULTIPLIER + CHARTY);
-  line(WIDTH * CHARTX_MULTIPLIER + CHARTX, CHARTY, WIDTH * CHARTX_MULTIPLIER + CHARTX, HEIGHT * CHARTY_MULTIPLIER + CHARTY);
-  
-  //Horizontal lines at the top and bottom of the chart.
-  line(CHARTX, CHARTY, WIDTH * CHARTX_MULTIPLIER + CHARTX, CHARTY);
-  line(CHARTX, HEIGHT * CHARTY_MULTIPLIER + CHARTY, WIDTH * CHARTX_MULTIPLIER + CHARTX, HEIGHT * CHARTY_MULTIPLIER + CHARTY);
+  drawn.setColors(elementColor, textColor);
 }
