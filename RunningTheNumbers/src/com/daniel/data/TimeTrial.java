@@ -6,12 +6,16 @@ public class TimeTrial
 {
 	private String name;
 	private Date date;
+	private String conditions;
+	private String comments;
 	private ArrayList<Run> performances;
 
-	public TimeTrial(String name, Date date)
+	public TimeTrial(String name, Date date, String conditions, String comments)
 	{
 		this.name = name;
 		this.date = date;
+		this.conditions = conditions;
+		this.comments = comments;
 		performances = new ArrayList<Run>();
 	}
 

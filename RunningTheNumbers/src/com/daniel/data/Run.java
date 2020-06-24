@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Run implements Comparable<Run>
 {
-	private Meet meet;
+	private TimeTrial meet;
 	private Runner runner;
 	
 	//Lists store times and places for splits and finish.
@@ -26,7 +26,7 @@ public class Run implements Comparable<Run>
 		return times.get(times.size() - 1).compareTo(other.getTime());
 	}
 
-	public Meet getMeet()
+	public TimeTrial getMeet()
 	{
 		return meet;
 	}

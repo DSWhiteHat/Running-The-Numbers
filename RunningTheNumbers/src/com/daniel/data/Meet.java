@@ -1,20 +1,21 @@
 package com.daniel.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Meet extends TimeTrial
 {
-	private ArrayList<Integer> teamScores;
+	private List<Scores> results;
 
-	public Meet(String name, Date date)
+	public Meet(String name, Date date, String conditions, String comments, List<Scores> results)
 	{
-		super(name, date);
+		super(name, date, conditions, comments);
 		
-		teamScores = new ArrayList<Integer>();
+		this.results = results;
 	}
 	
-	public ArrayList<Integer> getTeamScores()
+	public List<Scores> getResults()
 	{
-		return teamScores;
+		return results;
 	}
 }
