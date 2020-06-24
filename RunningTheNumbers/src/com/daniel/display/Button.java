@@ -31,9 +31,10 @@ public class Button extends DrawnText
 
 	public void display()
 	{
+		getP().stroke(getTextColor());
 		getP().fill(getC());
 		getP().rect(getX(), getY(), w, h, BUTTON_CURVE);
-
+		
 		getP().fill(getTextColor());
 		getP().textAlign(getP().CENTER, getP().CENTER);
 		getP().textSize(getTextSize());

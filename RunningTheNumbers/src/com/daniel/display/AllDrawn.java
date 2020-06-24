@@ -45,6 +45,11 @@ public class AllDrawn
 			{
 				((DrawnText) d).setTextColor(textColor);
 			}
+			
+			if (d instanceof Page)
+			{
+				((Page) d).getDrawn().setColors(c,  textColor);
+			}
 		}
 	}
 

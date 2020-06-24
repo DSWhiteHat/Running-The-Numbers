@@ -4,6 +4,8 @@ import processing.core.PApplet;
 
 public class Slider extends Button
 {
+	private boolean on = false;
+	
 	public Slider(float x, float y, PApplet p, float w, float h, int c, String text, float textSize, int textColor, Runnable onClick)
 	{
 		super(x, y, p, w, h, c, text, textSize, textColor, onClick);
@@ -25,10 +27,12 @@ public class Slider extends Button
 		if (getP().mouseX > getX() && getP().mouseX < getX() + getWidth() && getP().mouseY > getY() && getP().mouseY < getY() + getHeight())
 		{
 			getOnClick().run();
+			on = true;
 			return true;
 		}
 		else
 		{
+			on = true;
 			return false;
 		}
 	}
