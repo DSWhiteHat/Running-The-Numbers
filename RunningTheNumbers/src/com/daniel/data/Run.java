@@ -5,19 +5,19 @@ import java.util.List;
 public class Run implements Comparable<Run>
 {
 	private TimeTrial meet;
-	private Runner runner;
+	private String runner;
 	
 	//Lists store times and places for splits and finish.
 	private List<Time> times;
-	private List<Integer> teamPlaces;
+	private int teamPlace;
 	private List<Integer> places;
 
-	public Run(Runner runner, List<Time> times, Meet meet, List<Integer> teamPlaces, List<Integer> places)
+	public Run(String runner, List<Time> times, Meet meet, int teamPlace, List<Integer> places)
 	{
 		this.meet = meet;
 		this.runner = runner;
 		this.times = times;
-		this.teamPlaces = teamPlaces;
+		this.teamPlace = teamPlace;
 		this.places = places;
 	}
 
@@ -31,7 +31,7 @@ public class Run implements Comparable<Run>
 		return meet;
 	}
 
-	public Runner getRunner()
+	public String getRunner()
 	{
 		return runner;
 	}
@@ -39,11 +39,6 @@ public class Run implements Comparable<Run>
 	public List<Time> getTimes()
 	{
 		return times;
-	}
-	
-	public List<Integer> getTeamPlaces()
-	{
-		return teamPlaces;
 	}
 	
 	public List<Integer> getPlaces()
@@ -59,7 +54,7 @@ public class Run implements Comparable<Run>
 	
 	public int getTeamPlace()
 	{
-		return teamPlaces.get(teamPlaces.size() - 1);
+		return teamPlace;
 	}
 	
 	public int getPlace()

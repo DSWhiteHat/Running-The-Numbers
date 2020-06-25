@@ -14,6 +14,23 @@ public class Meet extends TimeTrial
 		this.results = results;
 	}
 	
+	public String toString()
+	{
+		String out = super.toString();
+		
+		if(results.size() != 0)
+		{
+			out += "Scores: \n";
+		}
+		
+		for(int i = 0; i < results.size(); i++)
+		{
+			out += results.get(i).toString() + "\n";
+		}
+	
+		return out;
+	}
+	
 	public List<Scores> getResults()
 	{
 		return results;

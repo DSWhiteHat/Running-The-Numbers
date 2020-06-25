@@ -85,6 +85,11 @@ public class Time implements Comparable<Time>
 		}
 	}
 
+	public String toString()
+	{
+		return minuteSecond;
+	}
+
 	public String getMinuteSecond()
 	{
 		return minuteSecond;

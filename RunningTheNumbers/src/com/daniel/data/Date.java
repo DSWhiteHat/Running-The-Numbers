@@ -16,6 +16,17 @@ public class Date implements Comparable<Date>
 
 		comparable = toFloat();
 	}
+	
+	public Date(String date)
+	{
+		String[] split = date.split("/");
+		
+		month = Integer.parseInt(split[0]);
+		day = Integer.parseInt(split[1]);
+		year = Integer.parseInt(split[2]);
+		
+		comparable = toFloat();
+	}
 
 	public String toString()
 	{
