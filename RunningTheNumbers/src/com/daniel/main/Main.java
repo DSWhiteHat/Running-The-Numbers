@@ -30,7 +30,7 @@ public class Main
 		File meets = new File("Data/meets.csv");
 		scrub(meets);
 
-		System.out.println(query(performances, meets, "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010"));
+		System.out.println(query(performances, meets, "McCaskey & Annville-Cleona @ Lancaster Catholic (Girls)", "9/7/2010"));
 		//System.out.println(query(performances, meets, "3200 Time Trial (Boys)", "2010"));
 	}
 
