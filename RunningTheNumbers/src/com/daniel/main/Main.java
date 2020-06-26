@@ -23,17 +23,20 @@ public class Main
 	public static void main(String[] args) throws IOException
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
-
+		
 		File performances = new File("Data/performances.csv");
 		scrub(performances);
-
+		
+		/*
 		File meets = new File("Data/meets.csv");
 		scrub(meets);
 
-		System.out.println(query(performances, meets, "McCaskey & Annville-Cleona @ Lancaster Catholic (Girls)", "9/7/2010"));
-		//System.out.println(query(performances, meets, "3200 Time Trial (Boys)", "2010"));
+		//System.out.println(query(performances, meets, "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010"));
+		System.out.println(query(performances, meets, "1600 Time Trial (Boys)", "2010"));
+		*/
 	}
 
+	//Cleans up the csv lines to prepare them for analysis.
 	public static void scrub(File file) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -43,8 +46,10 @@ public class Main
 		String line = reader.readLine();
 		while (line != null)
 		{
+			//Removing header row to leave only relevant statistics in the file.
 			if (!(line.contains("Name") && line.contains("Date")))
 			{
+				//Removing leading spaces.
 				while (line.charAt(0) == ' ')
 				{
 					line = line.substring(1);
@@ -52,14 +57,22 @@ public class Main
 
 				for (int i = 1; i < line.length(); i++)
 				{
+					//Leaving sections in quotes untouched.
 					if (line.charAt(i) == '"')
 					{
 						quotes = !quotes;
 					}
 
+					//Removing extra spaces next to commas or other spaces.
 					if (!quotes && line.charAt(i) == ' ' && (line.charAt(i + 1) == ',' || line.charAt(i - 1) == ',' || line.charAt(i + 1) == ' '))
 					{
 						line = line.substring(0, i) + line.substring(i + 1);
+					}
+					
+					//Removing extra spaces next to commas or other spaces.
+					if (!quotes && line.charAt(i) == ':' && (line.charAt(i + 3) == ':'))
+					{
+						line = line.substring(0, i + 3) + line.substring(i + 6);
 					}
 				}
 
@@ -73,6 +86,7 @@ public class Main
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
+		//Putting the lines back in the file (except the header row).
 		for (String l : lines)
 		{
 			writer.write(l + "\n");
@@ -81,24 +95,29 @@ public class Main
 		writer.close();
 	}
 
+	//Returns the meet specified.
 	public static Meet query(File performances, File meets, String name, String date) throws IOException
 	{
 		String search = name.toLowerCase();
 
 		BufferedReader reader = new BufferedReader(new FileReader(meets));
 
+		//Finding line with meet info from the "Meets" file.
 		String line = reader.readLine();
 		while (line != null && !(line.toLowerCase().contains(search) && line.contains(date)))
 		{
 			line = reader.readLine();
 		}
 
+		//If no meet matched search criteria.
 		if (line == null)
 		{
 			System.out.println("Search Failed.");
+			reader.close();
 			return null;
 		}
-
+		
+		//Removing unnecessary commas at the end of the line, places for extra score reports that were not used in this meet.
 		while (line.charAt(line.length() - 1) == ',')
 		{
 			line = line.substring(0, line.length() - 1);
@@ -108,6 +127,7 @@ public class Main
 
 		List<Scores> results = new ArrayList<Scores>();
 
+		//Separating the team names and scores from the end of the line.
 		for (int i = 4; i < split.length; i++)
 		{
 			List<String> teamNames = new ArrayList<String>();
@@ -124,11 +144,13 @@ public class Main
 			results.add(new Scores(teamNames, scores));
 		}
 
+		//Creating Meet object.
 		Meet output = new Meet(name, new Date(split[1]), split[2], split[3].replaceAll("\"", ""), results);
 
 		reader.close();
 		reader = new BufferedReader(new FileReader(performances));
 
+		//Searching for the lines containing the performances run at this meet.
 		line = reader.readLine();
 		while (line != null)
 		{
@@ -139,6 +161,7 @@ public class Main
 				List<Time> times = new ArrayList<Time>();
 				List<Integer> places = new ArrayList<Integer>();
 
+				//Finding all times listed on the line, both splits and final, whatever is provided.
 				for (int i = 4; i <= 8; i += 2)
 				{
 					if (performance[i] != null && !performance[i].equals(""))
@@ -147,10 +170,12 @@ public class Main
 					}
 				}
 
+				//Finding all places listed on the line, both splits and final, whatever is provided.
 				for (int i = 3; i <= 7; i += 2)
 				{
 					if (performance[i] != null && !performance[i].equals(""))
 					{
+						//If someone missed this person's place.
 						if(performance[i].equals("?"))
 						{
 							places.add(-1);
@@ -162,6 +187,7 @@ public class Main
 					}
 				}
 				
+				//Adding the place on the team. Codes: -1 -> unknown, -2 -> Did Not Finish, -3 -> Did Not Race.
 				int temp = 0;
 				if(performance[9].equals("?"))
 				{
@@ -188,6 +214,7 @@ public class Main
 		return output;
 	}
 
+	//Spliting a csv line around commas, but ignoring sections in quotes.
 	public static String[] separate(String csv)
 	{
 		List<String> list = new ArrayList<String>();

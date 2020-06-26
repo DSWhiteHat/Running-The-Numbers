@@ -52,8 +52,7 @@ public class RunningTheNumbers extends PApplet
 	public static final int TITLE_SIZE = 50;
 
 	// File reader to retrieve team data.
-	// final BufferedReader READER = createReader("/Users/Vicky
-	// Brown/Desktop/RunningTheNumbers/RunningNumbers.txt");
+	// final BufferedReader READER = createReader("/Users/VickyBrown/Desktop/RunningTheNumbers/RunningNumbers.txt");
 
 	// Dark mode initial color scheme.
 	boolean darkMode = true;
@@ -81,7 +80,7 @@ public class RunningTheNumbers extends PApplet
 		 * void run() { switchColors(); } })); drawn.addDrawn(new Graph(CHARTX, CHARTY, this, WIDTH * CHARTX_MULTIPLIER, HEIGHT *
 		 * CHARTY_MULTIPLIER, elementColor, LABEL_SIZE, textColor));
 		 */
-		
+
 		pages.addDrawn(new Page(0, 0, this, backgroundColor, TITLE_SIZE, textColor, "Running the Numbers", new AllDrawn()));
 	}
 

@@ -28,11 +28,16 @@ public class TimeTrial
 		
 		for(int i = 0; i < performances.size(); i++)
 		{
-			out += performances.get(i).getRunner() + "\t";
+			out += performances.get(i).getRunner() + "\t\t";
 			
 			for(int j = 0; j < performances.get(i).getTimes().size(); j++)
 			{
 				out += performances.get(i).getPlaces().get(j) + "\t" + performances.get(i).getTimes().get(j) + "\t";
+			}
+			
+			for(int j = 0; j < 3 - performances.get(i).getTimes().size(); j++)
+			{
+				out += "\t\t";
 			}
 			
 			out += performances.get(i).getTeamPlace() + "\n";
