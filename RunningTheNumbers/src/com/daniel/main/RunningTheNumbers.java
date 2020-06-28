@@ -1,5 +1,5 @@
 /*
-Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 17hrs.
+Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 26hrs.
 This project is my own work, D.S.
 This program is an interactive visualization tool for cross country team statistics across multiple years. Programmed for Cedar Crest Cross Country.
 */
@@ -19,6 +19,17 @@ Different axis labels.
 Main menu screen.
 Settings screen.
 Parsing screen.
+
+More immediate TODO:
+Make ? Times work.
+Make team places work with team scores.
+
+Scrubbing list:
+Remove trailing commas from the file
+Remove extra spaces
+Remove word "Conditions"
+Times with both :00 and 24;32 (semicolon) (Cheats to stop Excel from being dumb.)
+Remove spaces near semicolons as well.
 */
 
 package com.daniel.main;
