@@ -24,75 +24,159 @@ public class Main
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
 
-		/*
-		File test = new File("Data/Boys/2011/Hempfield @ Cocalico.csv");
-		scrub(test);
-		BufferedReader reader = new BufferedReader(new FileReader(test));
+		scrubNew(new File("Data\\Girls\\2011"));
 
-		String line = reader.readLine();
-		while (line != null)
-		{
-			System.out.println(line);
-			line = reader.readLine();
-		}
-		*/
-		
-		String test = "test,  test ,lalala lalala, blah  ";
-		String[] split = separate(test);
-		for(int i = 0; i < split.length; i++)
-		{
-			System.out.print(split[i] + ",");
-		}
-		
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
 		 * "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010")); System.out.println(query(performances, meets,
 		 * "1600 Time Trial (Boys)", "2010"));
 		 */
 	}
-
-	// Cleans up the csv lines to prepare them for analysis.
-	public static void scrub(File file) throws IOException
+	
+	public static void scrubNew(File directory) throws IOException
 	{
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		System.out.println("Checking for new files to scrub...");
+		File[] files = directory.listFiles();
+		
+		for(File f : files)
+		{
+			if(f.getName().contains(".csv"))
+			{
+				scrub(f);
+			}
+		}
+	}
+
+	// Cleans input CSV files and creates a text file of the same name and in the same location, but with the scrubbed data.
+	public static void scrub(File csv) throws IOException
+	{
+		System.out.println("Scrubbing " + csv.getName() + "...");
+
+		BufferedReader reader = new BufferedReader(new FileReader(csv));
 		List<String> lines = new ArrayList<String>();
 
 		// Meet Title.
-		String line = reader.readLine();
-		lines.add(line.substring(0, line.length() - 9));
+		lines.add(removeTrailingCommas(reader.readLine()));
 
 		// Date.
-		line = reader.readLine();
-		lines.add(line.substring(0, line.length() - 9));
+		lines.add(removeTrailingCommas(reader.readLine()));
 
 		// Conditions.
-		line = reader.readLine();
-		line = line.substring(12, line.length() - 8);
-		if (line.charAt(0) == '"')
+		String line = reader.readLine();
+		if (line.contains("Conditions:,"))
 		{
-			line = line.substring(1, line.length() - 1);
+			line = removeTrailingCommas(line.substring(12));
+			if (line.charAt(0) == '"')
+			{
+				line = line.substring(1, line.length() - 1);
+			}
+			lines.add(line);
 		}
-		lines.add(line);
+		else
+		{
+			lines.add("");
+		}
 
+		// Mandatory white space line.
 		reader.readLine();
-		line = reader.readLine();
 
+		// Data Table
+		line = reader.readLine();
 		String[] split = separate(line);
+
+		// Learning the columns that matter.
 		List<Integer> goodIndices = new ArrayList<Integer>();
 		for (int i = 0; i < split.length; i++)
 		{
 			if (split[i].equals("Mile 1") || split[i].equals("Place") || split[i].equals("Mile 2") || split[i].equals("5k") || split[i].equals("Fin. Place") || split[i].equals("Comments"))
 			{
-
+				goodIndices.add(i);
 			}
 		}
 
-		line = reader.readLine();
-		while (line != null)
+		// Storing those columns.
+		while (line.charAt(0) != ',')
 		{
+			split = separate(line);
+
+			line = split[0];
+			for (int i = 0; i < goodIndices.size(); i++)
+			{
+				line += "," + split[goodIndices.get(i)];
+			}
+			lines.add(line);
 
 			line = reader.readLine();
 		}
+
+		// Mandatory white space line in both CSV and text file to signify end of data table.
+		line = reader.readLine();
+		lines.add("");
+
+		// Team scores, spaces removed.
+		String scores = "";
+		split = separate(line.substring(13));
+
+		for (int i = 0; i < split.length; i++)
+		{
+			if (!split[i].isEmpty())
+			{
+				scores += removeSpace(split[i]) + ",";
+			}
+		}
+		
+		if(!scores.isEmpty())
+		{
+			scores = scores.substring(0, scores.length() - 1);
+		}
+		
+		lines.add(scores);
+		
+
+		// Mandatory white space and the "#1-#5 Spread"" and "Coach's Comments:" lines.
+		reader.readLine();
+		reader.readLine();
+		reader.readLine();
+
+		String comments = "";
+
+		// Comments could be longer than one line of the file.
+		line = reader.readLine();
+		while (line != null)
+		{
+			comments += line + "\n";
+			line = reader.readLine();
+		}
+		
+		//Removes extra \n and trailing commas.
+		comments = removeTrailingCommas(comments.substring(0, comments.length() - 2));
+
+		//Removing quotes at the beginning and end the CSV added.
+		if (comments.charAt(0) == '"' && comments.charAt(comments.length() - 1) == '"')
+		{
+			comments = comments.substring(1, comments.length() - 1);
+		}
+
+		// Removing double quotes, which the file wizardy added at some point.
+		comments = comments.replaceAll("\"\"", "\"");
+
+		lines.add(comments);
+
+		reader.close();
+
+		// Creating a new text file of the same name and writing the stored lines to it.
+		String csvName = csv.getAbsolutePath();
+		File text = new File(csvName.substring(0, csvName.length() - 4) + ".txt");
+		text.createNewFile();
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(text));
+
+		for (String l : lines)
+		{
+			writer.write(l + "\n");
+		}
+
+		writer.close();
 	}
 
 	// Returns the meet specified.
@@ -188,19 +272,7 @@ public class Main
 
 			if (i == csv.length() || !quote && csv.charAt(i) == ',')
 			{
-				String temp = csv.substring(comma + 1, i);
-				
-				while(temp.charAt(0) == ' ')
-				{
-					temp = temp.substring(1);
-				}
-				
-				while(temp.charAt(temp.length() - 1) == ' ')
-				{
-					temp = temp.substring(0, temp.length() - 1);
-				}
-				
-				list.add(temp);
+				list.add(removeSpace(csv.substring(comma + 1, i)));
 				comma = i;
 			}
 		}
@@ -209,5 +281,29 @@ public class Main
 		output = list.toArray(output);
 
 		return output;
+	}
+
+	public static String removeSpace(String string)
+	{
+		while (string.length() > 0 && string.charAt(0) == ' ')
+		{
+			string = string.substring(1);
+		}
+
+		while (string.length() > 0 && string.charAt(string.length() - 1) == ' ')
+		{
+			string = string.substring(0, string.length() - 1);
+		}
+		return string;
+	}
+	
+	public static String removeTrailingCommas(String string)
+	{
+		while(string.charAt(string.length() - 1) == ',')
+		{
+			string = string.substring(0, string.length() - 1);
+		}
+		
+		return string;
 	}
 }
