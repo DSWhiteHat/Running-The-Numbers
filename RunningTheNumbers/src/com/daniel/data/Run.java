@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Run implements Comparable<Run>
 {
-	private TimeTrial meet;
+	private Meet meet;
 	private String runner;
 	
 	//Lists store times and places for splits and finish.
-	private List<Time> times;
+	private Time[] times;
 	private int teamPlace;
-	private List<Integer> places;
+	private int[] places;
 
-	public Run(String runner, List<Time> times, Meet meet, int teamPlace, List<Integer> places)
+	public Run(String runner, Time[] times, Meet meet, int teamPlace, int[] places)
 	{
 		this.meet = meet;
 		this.runner = runner;
@@ -23,10 +23,10 @@ public class Run implements Comparable<Run>
 
 	public int compareTo(Run other)
 	{
-		return times.get(times.size() - 1).compareTo(other.getTime());
+		return getTime().compareTo(other.getTime());
 	}
 
-	public TimeTrial getMeet()
+	public Meet getMeet()
 	{
 		return meet;
 	}
@@ -36,29 +36,47 @@ public class Run implements Comparable<Run>
 		return runner;
 	}
 
-	public List<Time> getTimes()
+	public Time[] getTimes()
 	{
 		return times;
 	}
 	
-	public List<Integer> getPlaces()
+	public int[] getPlaces()
 	{
 		return places;
 	}
 	
-	//Finishing time / places.
+	//Finishing time.
 	public Time getTime()
 	{
-		return times.get(times.size() - 1);
+		for(int i = times.length; i >= 0; i--)
+		{
+			if(times[i] != null)
+			{
+				return times[i];
+			}
+		}
+		
+		return null;
 	}
 	
+	//Finishing place on team
 	public int getTeamPlace()
 	{
 		return teamPlace;
 	}
 	
+	//Finishing place.
 	public int getPlace()
 	{
-		return places.get(places.size() - 1);
+		for(int i = places.length; i >= 0; i--)
+		{
+			if(places[i] != 0)
+			{
+				return places[i];
+			}
+		}
+		
+		return 0;
 	}
 }

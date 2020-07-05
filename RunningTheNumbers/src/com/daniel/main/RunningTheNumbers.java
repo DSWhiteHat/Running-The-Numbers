@@ -1,5 +1,5 @@
 /*
-Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 26hrs.
+Daniel Stebbins, Cedar Crest High School, Began 11/20/19. 32hrs.
 This project is my own work, D.S.
 This program is an interactive visualization tool for cross country team statistics across multiple years. Programmed for Cedar Crest Cross Country.
 */

@@ -24,7 +24,7 @@ public class Main
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
 
-		scrubNew(new File("Data\\Girls\\2011"));
+		scrubNew(new File("Data\\Boys\\2011"));
 
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
@@ -134,7 +134,16 @@ public class Main
 		
 
 		// Mandatory white space and the "#1-#5 Spread"" and "Coach's Comments:" lines.
-		reader.readLine();
+		split = separate(reader.readLine());
+		if(split.length >= 3)
+		{
+			lines.add(split[2]);
+		}
+		else
+		{
+			lines.add("");
+		}
+		
 		reader.readLine();
 		reader.readLine();
 
@@ -188,7 +197,7 @@ public class Main
 
 		for (int i = 0; i < meets.length; i++)
 		{
-			if (meets[i].getName().toLowerCase().contains(query.toLowerCase()))
+			if (meets[i].getName().toLowerCase().contains(query.toLowerCase()) && meets[i].getName().contains(".txt"))
 			{
 				index = i;
 				break;
@@ -201,15 +210,38 @@ public class Main
 		}
 		else
 		{
-			scrub(meets[index]);
 			BufferedReader reader = new BufferedReader(new FileReader(meets[index]));
-
+			
+			String name = reader.readLine();
+			Date date = new Date(reader.readLine());
+			String conditions = reader.readLine();
+			
+			List<String> runs = new ArrayList<String>();
 			String line = reader.readLine();
-			while (line != null)
+			while (line != null && !line.isEmpty())
 			{
-
+				runs.add(line);
 			}
+			
+			String scores = reader.readLine();
+			String SpreadComments = reader.readLine();
+			
+			String comments = reader.readLine();
+			line = reader.readLine();
+			while(line != null)
+			{
+				comments += "\n" + line;
+				line = reader.readLine();
+			}
+			
+			List<Run> performances = new ArrayList<Run>();
+			List<Scores> results = new ArrayList<Scores>();
+			
+			
+			reader.close();
 		}
+		
+		
 
 		return null;
 	}
