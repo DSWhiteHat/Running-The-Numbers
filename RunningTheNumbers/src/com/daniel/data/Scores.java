@@ -4,28 +4,28 @@ import java.util.List;
 
 public class Scores
 {
-	private List<String> teamNames;
+	private List<Team> teams;
 	private List<Integer> scores;
 	
-	public Scores(List<String> teamNames, List<Integer> scores)
+	public Scores(List<Team> teams, List<Integer> scores)
 	{
-		this.teamNames = teamNames;
+		this.teams = teams;
 		this.scores = scores;
 	}
 	
 	public String toString()
 	{
-		String out = teamNames.get(0) + " (" + scores.get(0) + ")";
-		for(int i = 1; i < teamNames.size(); i++)
+		String out = teams.get(0) + " (" + scores.get(0) + ")";
+		for(int i = 1; i < teams.size(); i++)
 		{
-			out += " - " + teamNames.get(i) + " (" + scores.get(i) + ")";
+			out += " - " + teams.get(i) + " (" + scores.get(i) + ")";
 		}
 		return out;
 	}
 	
-	public List<String> getTeamNames()
+	public List<Team> getTeams()
 	{
-		return teamNames;
+		return teams;
 	}
 	
 	public List<Integer> getScores()

@@ -7,16 +7,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.daniel.data.Date;
 import com.daniel.data.Meet;
 import com.daniel.data.Run;
+import com.daniel.data.Runner;
 import com.daniel.data.Scores;
 import com.daniel.data.Time;
-
-import processing.core.PApplet;
 
 public class Main
 {
@@ -189,7 +187,7 @@ public class Main
 	}
 
 	// Returns the meet specified.
-	public static Meet query(String folder, String gender, String year, String query) throws IOException
+	public static Meet queryMeet(String folder, String gender, String year, String query) throws IOException
 	{
 		File directory = new File(folder + "/" + gender + "/" + year);
 		File[] meets = directory.listFiles();
@@ -224,7 +222,7 @@ public class Main
 			}
 			
 			String scores = reader.readLine();
-			String SpreadComments = reader.readLine();
+			String spreadComments = reader.readLine();
 			
 			String comments = reader.readLine();
 			line = reader.readLine();
@@ -232,17 +230,64 @@ public class Main
 			{
 				comments += "\n" + line;
 				line = reader.readLine();
+			}	
+				
+			Meet meet = new Meet(name, date, conditions, spreadComments, comments);
+			
+			String[] key = separate(runs.remove(0));
+			for(int i = 0; i < runs.size(); i++)
+			{
+				Time[] times = new Time[3];
+				int[] places = new int[3];
+				comments = "";
+				
+				int currentMile = 3;
+				String[] split = separate(runs.get(i));
+				for(int j = 1; j < key.length; j++)
+				{
+					if(key[i] == "Mile 1")
+					{
+						times[0] = new Time(split[i]);
+						currentMile = 1;
+					}
+					else if(key[i] == "Mile 2")
+					{
+						times[1] = new Time(split[i]);
+						currentMile = 2;
+					}
+					else if(key[i] == "5k")
+					{
+						times[2] = new Time(split[i]);
+						currentMile = 3;
+					}
+					else if(key[i] == "Place")
+					{
+						places[currentMile - 1] = Integer.parseInt(split[i]);
+					}
+					else if(key[i] == "Fin. Place")
+					{
+						places[places.length - 1] = Integer.parseInt(split[i]);
+					}
+					else if(key[i] == "Comments")
+					{
+						comments = split[i];
+					}
+				}
+				meet.addPerformance(new Run(meet, new Runner(split[0]), times, i, places));
 			}
 			
-			List<Run> performances = new ArrayList<Run>();
-			List<Scores> results = new ArrayList<Scores>();
-			
-			
 			reader.close();
+			reader = new BufferedReader(new FileReader(new File(folder + "\\Team Abreviations.txt")));
+			
+			String[] split = separate(scores);
+			for(int i = 0; i < split.length; i++)
+			{
+				
+			}
+			
+			
 		}
 		
-		
-
 		return null;
 	}
 

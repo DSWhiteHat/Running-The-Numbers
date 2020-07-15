@@ -1,0 +1,23 @@
+McCaskey: MC,
+Hempfield: H, HF
+Manheim Township: MT
+Penn Manor: PM
+Cedar Crest: CC
+Conestoga Valley: CV
+Warwick: W
+Elizabethtown: ET
+Lebanon: L
+Ephrata: E, Eph
+Solanco: S, SOL
+Garden Spot: GS
+Cocalico: C, CO
+Manheim Central: MC
+Lampeter-Strasburg: LS, L-S
+Donegal: D, DON
+ELCO:
+Octorara: O, OCT
+Northern Lebanon: NL
+Lancaster Catholic: LC
+Annville-Cleona: AC, A-C
+Lancaster Mennonite: LM
+Columbia: COL

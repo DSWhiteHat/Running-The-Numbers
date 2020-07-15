@@ -13,21 +13,23 @@ public class Meet
 	private String spreadComments;
 	private String comments;
 
-	public Meet(String name, Date date, String conditions, List<Run> performances, List<Scores> results, String comments)
+	public Meet(String name, Date date, String conditions, List<Run> performances, List<Scores> results, String spreadComments, String comments)
 	{
 		this.name = name;
 		this.date = date;
 		this.conditions = conditions;
 		this.performances = performances;
 		this.results = results;
+		this.spreadComments = spreadComments;
 		this.comments = comments;
 	}
 	
-	public Meet(String name, Date date, String conditions, String comments)
+	public Meet(String name, Date date, String conditions, String spreadComments, String comments)
 	{
 		this.name = name;
 		this.date = date;
 		this.conditions = conditions;
+		this.spreadComments = spreadComments;
 		this.comments = comments;
 		
 		performances = new ArrayList<Run>();
