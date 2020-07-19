@@ -191,7 +191,7 @@ public class Main
 	}
 
 	// Returns the meet specified.
-	public static Meet load(String folder, String gender, String year, String query) throws IOException
+	public static Meet load(String folder, String gender, String year, String query, Team team) throws IOException
 	{
 		File directory = new File(folder + "/" + gender + "/" + year);
 		File[] meets = directory.listFiles();
@@ -278,8 +278,15 @@ public class Main
 					}
 				}
 				
-				if(runners.contains())
-				meet.addPerformance(new Run(meet, new Runner(split[0]), times, i, places));
+				boolean exists = false;
+				for(int j = 0; j < team.getRunners().size(); j++)
+				{
+					if(team.getRunners().get(i).getName() == name)
+					{
+						exists = true;
+					}
+				}
+				meet.addPerformance(new Run(meet, new Runner(split[0], team), times, i, places));
 			}
 			
 			reader.close();

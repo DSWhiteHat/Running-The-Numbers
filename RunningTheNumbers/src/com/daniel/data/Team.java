@@ -6,18 +6,18 @@ import java.util.List;
 public class Team
 {
 	String name;
-	List<Runner> members;
+	List<Runner> runners;
 
-	public Team(String name, List<Runner> members)
+	public Team(String name, List<Runner> runners)
 	{
 		this.name = name;
-		this.members = members;
+		this.runners = runners;
 	}
 	
 	public Team(String name)
 	{
 		this.name = name;
-		members = new ArrayList<Runner>();
+		runners = new ArrayList<Runner>();
 	}
 
 	public String getName()
@@ -30,13 +30,13 @@ public class Team
 		this.name = name;
 	}
 
-	public List<Runner> getMembers()
+	public List<Runner> getRunners()
 	{
-		return members;
+		return runners;
 	}
 
-	public void setMembers(List<Runner> members)
+	public void setRunners(List<Runner> runners)
 	{
-		this.members = members;
+		this.runners = runners;
 	}
 }
