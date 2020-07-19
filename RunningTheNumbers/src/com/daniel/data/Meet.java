@@ -23,7 +23,7 @@ public class Meet
 		this.spreadComments = spreadComments;
 		this.comments = comments;
 	}
-	
+
 	public Meet(String name, Date date, String conditions, String spreadComments, String comments)
 	{
 		this.name = name;
@@ -31,9 +31,14 @@ public class Meet
 		this.conditions = conditions;
 		this.spreadComments = spreadComments;
 		this.comments = comments;
-		
+
 		performances = new ArrayList<Run>();
 		results = new ArrayList<Scores>();
+	}
+
+	public boolean equals(Meet other)
+	{
+		return name.equals(other.getName()) && date.equals(other.getDate());
 	}
 
 	public String toString()
@@ -57,7 +62,7 @@ public class Meet
 		if (results.size() != 0)
 		{
 			out += "Scores: \n";
-			
+
 			for (int i = 0; i < results.size(); i++)
 			{
 				out += results.get(i).toString() + "\n";
@@ -66,7 +71,7 @@ public class Meet
 
 		return out;
 	}
-	
+
 	public String getName()
 	{
 		return name;
@@ -91,12 +96,12 @@ public class Meet
 	{
 		return performances;
 	}
-	
+
 	public void setPerformances(List<Run> performances)
 	{
 		this.performances = performances;
 	}
-	
+
 	public void addPerformance(Run performance)
 	{
 		performances.add(performance);
@@ -106,12 +111,12 @@ public class Meet
 	{
 		return results;
 	}
-	
+
 	public void setResults(List<Scores> results)
 	{
 		this.results = results;
 	}
-	
+
 	public String getSpreadComments()
 	{
 		return spreadComments;

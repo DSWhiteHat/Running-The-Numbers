@@ -25,6 +25,11 @@ public class Run implements Comparable<Run>
 	{
 		return getTime().compareTo(other.getTime());
 	}
+	
+	public boolean equals(Run other)
+	{
+		return (compareTo(other) == 0);
+	}
 
 	public Meet getMeet()
 	{

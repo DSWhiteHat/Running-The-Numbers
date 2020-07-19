@@ -27,21 +27,14 @@ public class Date implements Comparable<Date>
 		
 		comparable = toFloat();
 	}
-
-	public String toString()
-	{
-		return month + "/" + day + "/" + year;
-	}
-
+	
 	public int compareTo(Date other)
 	{
-		Date temp = (Date) other;
-
-		if (comparable == temp.getComparable())
+		if (comparable == other.getComparable())
 		{
 			return 0;
 		}
-		else if (comparable > temp.getComparable())
+		else if (comparable > other.getComparable())
 		{
 			return 1;
 		}
@@ -49,6 +42,16 @@ public class Date implements Comparable<Date>
 		{
 			return -1;
 		}
+	}
+	
+	public boolean equals(Date other)
+	{
+		return comparable == other.getComparable();
+	}
+
+	public String toString()
+	{
+		return month + "/" + day + "/" + year;
 	}
 
 	public float toFloat()

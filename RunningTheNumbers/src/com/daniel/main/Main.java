@@ -14,10 +14,15 @@ import com.daniel.data.Meet;
 import com.daniel.data.Run;
 import com.daniel.data.Runner;
 import com.daniel.data.Scores;
+import com.daniel.data.Team;
 import com.daniel.data.Time;
 
 public class Main
 {
+	public List<Team> teams = new ArrayList<Team>();
+	public List<Meet> meets = new ArrayList<Meet>();
+	public List<Runner> runners = new ArrayList<Runner>();
+	
 	public static void main(String[] args) throws IOException
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
@@ -187,7 +192,7 @@ public class Main
 	}
 
 	// Returns the meet specified.
-	public static Meet queryMeet(String folder, String gender, String year, String query) throws IOException
+	public static Meet load(String folder, String gender, String year, String query) throws IOException
 	{
 		File directory = new File(folder + "/" + gender + "/" + year);
 		File[] meets = directory.listFiles();
@@ -273,6 +278,8 @@ public class Main
 						comments = split[i];
 					}
 				}
+				
+				if(runners.contains())
 				meet.addPerformance(new Run(meet, new Runner(split[0]), times, i, places));
 			}
 			

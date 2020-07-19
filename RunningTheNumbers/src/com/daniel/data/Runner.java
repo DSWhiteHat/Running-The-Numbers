@@ -6,8 +6,6 @@ public class Runner
 {
 	private String name;
 	private ArrayList<Run> performances;
-	private Run pr;
-	private Time averageTime;
 	
 	public Runner(String name)
 	{
@@ -19,8 +17,6 @@ public class Runner
 	{
 		this.name = name;
 		this.performances = performances;
-		averageTime = Time.average(performances);
-		pr = findPR(performances);
 	}
 	
 	public static Run findPR(ArrayList<Run> performances)
@@ -37,6 +33,11 @@ public class Runner
 
 		return pr;
 	}
+	
+	public boolean equals(Runner other)
+	{
+		return (name.equals(other.getName()) && performances.equals(other.getPerformances()));
+	}
 
 	public String getName()
 	{
@@ -50,11 +51,11 @@ public class Runner
 
 	public Run getPR()
 	{
-		return pr;
+		return findPR(performances);
 	}
 
 	public Time getAverageTime()
 	{
-		return averageTime;
+		return Time.average(performances);
 	}
 }
