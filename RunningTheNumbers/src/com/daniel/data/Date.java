@@ -28,6 +28,17 @@ public class Date implements Comparable<Date>
 		comparable = toFloat();
 	}
 	
+	public float toFloat()
+	{
+		comparable = year;
+
+		float days = day + monthToDays[month - 2];
+
+		comparable += (days / 365);
+
+		return comparable;
+	}
+	
 	public int compareTo(Date other)
 	{
 		if (comparable == other.getComparable())
@@ -52,17 +63,6 @@ public class Date implements Comparable<Date>
 	public String toString()
 	{
 		return month + "/" + day + "/" + year;
-	}
-
-	public float toFloat()
-	{
-		comparable = year;
-
-		float days = day + monthToDays[month - 2];
-
-		comparable += (days / 365);
-
-		return comparable;
 	}
 
 	public int getMonth()
