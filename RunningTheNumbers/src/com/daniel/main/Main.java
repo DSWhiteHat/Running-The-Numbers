@@ -21,7 +21,6 @@ public class Main
 {
 	public List<Team> teams = new ArrayList<Team>();
 	public List<Meet> meets = new ArrayList<Meet>();
-	public List<Runner> runners = new ArrayList<Runner>();
 	
 	public static void main(String[] args) throws IOException
 	{

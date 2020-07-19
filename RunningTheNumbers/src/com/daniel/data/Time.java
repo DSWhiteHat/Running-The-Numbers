@@ -1,6 +1,7 @@
 package com.daniel.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Time implements Comparable<Time>
 {
@@ -55,7 +56,7 @@ public class Time implements Comparable<Time>
 		return formatted;
 	}
 
-	public static Time average(ArrayList<Run> performances)
+	public static Time average(List<Run> performances)
 	{
 		float total = 0.0f;
 

@@ -1,25 +1,24 @@
 package com.daniel.data;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import com.daniel.main.Main;
 
 public class Runner
 {
 	private String name;
-	private ArrayList<Run> performances;
+	private List<Integer> years;
+	private List<Run> performances;
 	
 	public Runner(String name)
 	{
 		this.name = name;
+		setYears(new ArrayList<Integer>());
 		performances = new ArrayList<Run>();
 	}
-
-	public Runner(String name, ArrayList<Run> performances)
-	{
-		this.name = name;
-		this.performances = performances;
-	}
 	
-	public static Run findPR(ArrayList<Run> performances)
+	public static Run findPR(List<Run> performances)
 	{
 		Run pr = performances.get(0);
 
@@ -34,6 +33,18 @@ public class Runner
 		return pr;
 	}
 	
+	public void addPerformance(Run performance)
+	{
+		performances.add(performance);
+		
+		int year = Integer.parseInt((performance.getMeet().getDate().toString().split("/"))[2]);
+		
+		if(!years.contains(year))
+		{
+			years.add(year);
+		}
+	}
+	
 	public boolean equals(Runner other)
 	{
 		return (name.equals(other.getName()) && performances.equals(other.getPerformances()));
@@ -44,7 +55,17 @@ public class Runner
 		return name;
 	}
 
-	public ArrayList<Run> getPerformances()
+	public List<Integer> getYears()
+	{
+		return years;
+	}
+
+	public void setYears(List<Integer> years)
+	{
+		this.years = years;
+	}
+
+	public List<Run> getPerformances()
 	{
 		return performances;
 	}
