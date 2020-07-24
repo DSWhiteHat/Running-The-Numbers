@@ -7,14 +7,15 @@ public class Runner
 {
 	private String name;
 	private Team team;
-	private List<Integer> years;
+	int gradYear;
+	private int[] years;
 	private List<Run> performances;
 
 	public Runner(String name, Team team)
 	{
 		this.name = name;
 		this.setTeam(team);
-		setYears(new ArrayList<Integer>());
+		years = new int[4];
 		performances = new ArrayList<Run>();
 	}
 
@@ -38,26 +39,48 @@ public class Runner
 		performances.add(performance);
 
 		int year = Integer.parseInt((performance.getMeet().getDate().toString().split("/"))[2]);
-
-		if (!years.contains(year))
-		{
-			years.add(year);
-		}
+		years[year - years[0]] = year;
 	}
 
 	//Equal by name and years on the team.
 	public boolean equals(String name, int year)
 	{
-		if(this.name.contains(" "))
+		if(year >= gradYear - 4 && year < gradYear)
 		{
-			String[] split = name.split(" ");
-		}
-		if(name.contains(" "))
-		{
-			String[] split = name.split(" ");
+			if(this.name.equals(name))
+			{
+				return true;
+			}
+			
+			String[] splitOne = {"", this.name};
+			String[] splitTwo = {"", name};
+			
+			if(this.name.contains(" "))
+			{
+				splitOne = name.split(" ");
+			}
+			if(name.contains(" "))
+			{
+				splitTwo = name.split(" ");
+			}
+			
+			if(splitOne[1].equals(splitTwo[1]))
+			{
+				if(splitOne[0].length() != 0 && splitTwo[0].length() != 0 && splitOne[0].charAt(0) == splitTwo[0].charAt(0))
+				{
+					return false;
+				}
+				
+				if(splitOne[0].length() < splitTwo[0].length())
+				{
+					this.name = splitTwo[0] + " " + splitOne[1];
+				}
+				
+				return true;
+			}
 		}
 		
-		return true;
+		return false;
 	}
 
 	public String getName()
