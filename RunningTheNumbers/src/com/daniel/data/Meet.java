@@ -116,6 +116,11 @@ public class Meet
 	{
 		this.results = results;
 	}
+	
+	public void addResults(Scores result)
+	{
+		results.add(result);
+	}
 
 	public String getSpreadComments()
 	{

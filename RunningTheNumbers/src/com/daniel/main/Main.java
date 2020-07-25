@@ -19,8 +19,8 @@ import com.daniel.data.Time;
 
 public class Main
 {
-	public List<Team> teams = new ArrayList<Team>();
-	public List<Meet> meets = new ArrayList<Meet>();
+	public static List<Team> teams = new ArrayList<Team>();
+	public static List<Meet> meets = new ArrayList<Meet>();
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -191,7 +191,7 @@ public class Main
 	}
 
 	// Returns the meet specified.
-	public static Meet load(String folder, String gender, String year, String query, Team team) throws IOException
+	public static Meet load(String folder, String gender, int year, String query, Team team) throws IOException
 	{
 		File directory = new File(folder + "/" + gender + "/" + year);
 		File[] meets = directory.listFiles();
@@ -238,6 +238,62 @@ public class Main
 				
 			Meet meet = new Meet(name, date, conditions, spreadComments, comments);
 			
+			reader.close();
+			reader = new BufferedReader(new FileReader(new File(folder + "\\Team Abreviations.txt")));
+			List<String> lines = new ArrayList<String>();
+			
+			line = reader.readLine();
+			while(line != null)
+			{
+				lines.add(line);
+				line = reader.readLine();
+			}
+			
+			Team tempTeam;
+			List<Team> tempTeams = new ArrayList<Team>();
+			List<Integer> points = new ArrayList<Integer>();
+			
+			String[] split = separate(scores);
+			
+			for(int i = 0; i < split.length; i++)
+			{
+				String[] spliter = split[i].split("; ");
+				
+				for(int j = 0; j < spliter.length; j++)
+				{
+					String[] splitest = spliter[j].split("-");
+					
+					for(int k = 0; k < lines.size(); k++)
+					{
+						if(lines.get(k).contains(" " + splitest[0] + ","))
+						{
+							String teamName = lines.get(k).substring(0, lines.get(k).indexOf(':'));
+							
+							for(int l = 0; l < tempTeams.size(); l++)
+							{
+								if(teams.get(l).getName().equals(teamName))
+								{
+									tempTeam = teams.get(l);
+									tempTeam.addMeet(meet);
+									tempTeams.add(tempTeam);
+								}
+								else
+								{
+									tempTeam = new Team(teamName);
+									tempTeam.addMeet(meet);
+									tempTeams.add(tempTeam);
+									teams.add(tempTeam);
+								}
+							}
+						}
+					}
+					
+					points.add(Integer.parseInt(splitest[1]));
+				}
+				
+				meet.addResults(new Scores(tempTeams, points));
+			}
+			
 			String[] key = separate(runs.remove(0));
 			for(int i = 0; i < runs.size(); i++)
 			{
@@ -246,7 +302,7 @@ public class Main
 				comments = "";
 				
 				int currentMile = 3;
-				String[] split = separate(runs.get(i));
+				split = separate(runs.get(i));
 				for(int j = 1; j < key.length; j++)
 				{
 					if(key[i] == "Mile 1")
@@ -278,27 +334,24 @@ public class Main
 					}
 				}
 				
-				boolean exists = false;
+				Runner runner = new Runner(name, team);
+				boolean newRunner = true;
 				for(int j = 0; j < team.getRunners().size(); j++)
 				{
-					if(team.getRunners().get(i).getName() == name)
+					if(team.getRunners().get(i).equals(name, year))
 					{
-						exists = true;
+						runner = team.getRunners().get(i);
+						newRunner = false;
 					}
 				}
-				meet.addPerformance(new Run(meet, new Runner(split[0], team), times, i, places));
-			}
-			
-			reader.close();
-			reader = new BufferedReader(new FileReader(new File(folder + "\\Team Abreviations.txt")));
-			
-			String[] split = separate(scores);
-			for(int i = 0; i < split.length; i++)
-			{
+				if(newRunner)
+				{
+					team.addRunner(runner);
+				}
+	
 				
-			}
-			
-			
+				meet.addPerformance(new Run(meet, runner, times, i, places));
+			}	
 		}
 		
 		return null;
