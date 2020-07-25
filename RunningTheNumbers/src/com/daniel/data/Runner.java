@@ -39,6 +39,12 @@ public class Runner
 		performances.add(performance);
 
 		int year = Integer.parseInt((performance.getMeet().getDate().toString().split("/"))[2]);
+		
+		if(years[0] == 0)
+		{
+			years[0] = year;
+			gradYear = year + 5;
+		}
 		years[year - years[0]] = year;
 	}
 
@@ -57,7 +63,7 @@ public class Runner
 			
 			if(this.name.contains(" "))
 			{
-				splitOne = name.split(" ");
+				splitOne = this.name.split(" ");
 			}
 			if(name.contains(" "))
 			{
@@ -66,7 +72,7 @@ public class Runner
 			
 			if(splitOne[1].equals(splitTwo[1]))
 			{
-				if(splitOne[0].length() != 0 && splitTwo[0].length() != 0 && splitOne[0].charAt(0) == splitTwo[0].charAt(0))
+				if(splitOne[0].length() != 0 && splitTwo[0].length() != 0 && splitOne[0].charAt(0) != splitTwo[0].charAt(0))
 				{
 					return false;
 				}
@@ -98,12 +104,12 @@ public class Runner
 		this.team = team;
 	}
 
-	public List<Integer> getYears()
+	public int[] getYears()
 	{
 		return years;
 	}
 
-	public void setYears(List<Integer> years)
+	public void setYears(int[] years)
 	{
 		this.years = years;
 	}

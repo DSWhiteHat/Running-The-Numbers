@@ -26,8 +26,8 @@ public class Main
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
 
-		scrubNew(new File("Data\\Boys\\2011"));
-
+		//scrubNew(new File("Data\\Boys\\2011"));
+		
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
 		 * "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010")); System.out.println(query(performances, meets,
