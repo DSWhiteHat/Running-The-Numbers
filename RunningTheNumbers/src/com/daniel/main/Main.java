@@ -28,6 +28,9 @@ public class Main
 
 		//scrubNew(new File("Data\\Boys\\2011"));
 		
+		teams.add(new Team("Cedar Crest"));
+		System.out.println(load("Data", "Boys", 2011, "Hempfield", teams.get(0)));
+		
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
 		 * "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010")); System.out.println(query(performances, meets,
@@ -209,6 +212,7 @@ public class Main
 		if (index == -1)
 		{
 			System.out.println("Meet Not Found");
+			return null;
 		}
 		else
 		{
@@ -220,9 +224,11 @@ public class Main
 			
 			List<String> runs = new ArrayList<String>();
 			String line = reader.readLine();
+			int test = 1;
 			while (line != null && !line.isEmpty())
 			{
 				runs.add(line);
+				line = reader.readLine();
 			}
 			
 			String scores = reader.readLine();
@@ -268,8 +274,9 @@ public class Main
 						if(lines.get(k).contains(" " + splitest[0] + ","))
 						{
 							String teamName = lines.get(k).substring(0, lines.get(k).indexOf(':'));
+							System.out.println(teamName);
 							
-							for(int l = 0; l < tempTeams.size(); l++)
+							for(int l = 0; l < teams.size(); l++)
 							{
 								if(teams.get(l).getName().equals(teamName))
 								{
@@ -305,32 +312,32 @@ public class Main
 				split = separate(runs.get(i));
 				for(int j = 1; j < key.length; j++)
 				{
-					if(key[i] == "Mile 1")
+					if(key[j] == "Mile 1")
 					{
-						times[0] = new Time(split[i]);
+						times[0] = new Time(split[j]);
 						currentMile = 1;
 					}
-					else if(key[i] == "Mile 2")
+					else if(key[j] == "Mile 2")
 					{
-						times[1] = new Time(split[i]);
+						times[1] = new Time(split[j]);
 						currentMile = 2;
 					}
-					else if(key[i] == "5k")
+					else if(key[j] == "5k")
 					{
-						times[2] = new Time(split[i]);
+						times[2] = new Time(split[j]);
 						currentMile = 3;
 					}
-					else if(key[i] == "Place")
+					else if(key[j] == "Place")
 					{
-						places[currentMile - 1] = Integer.parseInt(split[i]);
+						places[currentMile - 1] = Integer.parseInt(split[j]);
 					}
-					else if(key[i] == "Fin. Place")
+					else if(key[j] == "Fin. Place")
 					{
-						places[places.length - 1] = Integer.parseInt(split[i]);
+						places[places.length - 1] = Integer.parseInt(split[j]);
 					}
-					else if(key[i] == "Comments")
+					else if(key[j] == "Comments")
 					{
-						comments = split[i];
+						comments = split[j];
 					}
 				}
 				
@@ -338,9 +345,9 @@ public class Main
 				boolean newRunner = true;
 				for(int j = 0; j < team.getRunners().size(); j++)
 				{
-					if(team.getRunners().get(i).equals(name, year))
+					if(team.getRunners().get(j).equals(name, year))
 					{
-						runner = team.getRunners().get(i);
+						runner = team.getRunners().get(j);
 						newRunner = false;
 					}
 				}
@@ -352,9 +359,9 @@ public class Main
 				
 				meet.addPerformance(new Run(meet, runner, times, i, places));
 			}	
+			
+			return meet;
 		}
-		
-		return null;
 	}
 
 	/*

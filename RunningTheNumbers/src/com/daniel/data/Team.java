@@ -5,25 +5,29 @@ import java.util.List;
 
 public class Team
 {
-	String name;
-	List<Meet> meets;
-	List<Runner> runners;
+	private School school;
+	private int year;
+	private boolean boys;
+	private List<Meet> meets;
+	private List<Runner> runners;
 	
-	public Team(String name)
+	public Team(School school, int year, boolean boys)
 	{
-		this.name = name;
+		this.school = school;
+		this.year = year;
+		this.boys = boys;
 		meets = new ArrayList<Meet>();
 		runners = new ArrayList<Runner>();
 	}
 
-	public String getName()
+	public School getSchool()
 	{
-		return name;
+		return school;
 	}
 
-	public void setName(String name)
+	public void setName(School school)
 	{
-		this.name = name;
+		this.school = school;
 	}
 
 	public List<Meet> getMeets()
