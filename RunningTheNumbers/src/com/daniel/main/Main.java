@@ -7,45 +7,51 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.daniel.data.Date;
-import com.daniel.data.Meet;
+import com.daniel.data.MeetSheet;
 import com.daniel.data.Run;
 import com.daniel.data.Runner;
+import com.daniel.data.School;
 import com.daniel.data.Scores;
 import com.daniel.data.Team;
 import com.daniel.data.Time;
 
 public class Main
 {
-	public static List<Team> teams = new ArrayList<Team>();
-	public static List<Meet> meets = new ArrayList<Meet>();
-	
+	/*
+	 * public static List<Team> teams = new ArrayList<Team>(); public static List<Meet> meets = new ArrayList<Meet>();
+	 */
+
+	public static HashMap<String, School> schools = new HashMap<String, School>();
+
 	public static void main(String[] args) throws IOException
 	{
 		// PApplet.main("com.daniel.main.RunningTheNumbers");
 
-		//scrubNew(new File("Data\\Boys\\2011"));
-		
-		teams.add(new Team("Cedar Crest"));
-		System.out.println(load("Data", "Boys", 2011, "Hempfield", teams.get(0)));
-		
+		// scrubNew(new File("Data\\Boys\\2011"));
+		String schoolName = "Cedar Crest High School";
+		schools.put(schoolName, new School(schoolName));
+		schools.get(schoolName).addTeam("Boys", 2011);
+		System.out.println(load("Solanco", schoolName, "Boys", 2011));
+
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
 		 * "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010")); System.out.println(query(performances, meets,
 		 * "1600 Time Trial (Boys)", "2010"));
 		 */
 	}
-	
+
 	public static void scrubNew(File directory) throws IOException
 	{
 		System.out.println("Checking for new files to scrub...");
 		File[] files = directory.listFiles();
-		
-		for(File f : files)
+
+		for (File f : files)
 		{
-			if(f.getName().contains(".csv"))
+			if (f.getName().contains(".csv"))
 			{
 				scrub(f);
 			}
@@ -129,18 +135,17 @@ public class Main
 				scores += removeSpace(split[i]) + ",";
 			}
 		}
-		
-		if(!scores.isEmpty())
+
+		if (!scores.isEmpty())
 		{
 			scores = scores.substring(0, scores.length() - 1);
 		}
-		
+
 		lines.add(scores);
-		
 
 		// Mandatory white space and the "#1-#5 Spread"" and "Coach's Comments:" lines.
 		split = separate(reader.readLine());
-		if(split.length >= 3)
+		if (split.length >= 3)
 		{
 			lines.add(split[2]);
 		}
@@ -148,7 +153,7 @@ public class Main
 		{
 			lines.add("");
 		}
-		
+
 		reader.readLine();
 		reader.readLine();
 
@@ -161,11 +166,11 @@ public class Main
 			comments += line + "\n";
 			line = reader.readLine();
 		}
-		
-		//Removes extra \n and trailing commas.
+
+		// Removes extra \n and trailing commas.
 		comments = removeTrailingCommas(comments.substring(0, comments.length() - 2));
 
-		//Removing quotes at the beginning and end the CSV added.
+		// Removing quotes at the beginning and end the CSV added.
 		if (comments.charAt(0) == '"' && comments.charAt(comments.length() - 1) == '"')
 		{
 			comments = comments.substring(1, comments.length() - 1);
@@ -193,13 +198,15 @@ public class Main
 		writer.close();
 	}
 
-	// Returns the meet specified.
-	public static Meet load(String folder, String gender, int year, String query, Team team) throws IOException
+	// Returns the MeetSheet specified by the query.
+	public static MeetSheet load(String query, String school, String gender, int year) throws IOException
 	{
-		File directory = new File(folder + "/" + gender + "/" + year);
-		File[] meets = directory.listFiles();
+		//Navigate file system to correct folder.
+		File folder = new File("Data/" + school + "/" + gender + "/" + year);
+		File[] meets = folder.listFiles();
 		int index = -1;
 
+		//Search for specified meet in specified folder.
 		for (int i = 0; i < meets.length; i++)
 		{
 			if (meets[i].getName().toLowerCase().contains(query.toLowerCase()) && meets[i].getName().contains(".txt"))
@@ -216,6 +223,7 @@ public class Main
 		}
 		else
 		{
+			//Storing MeetSheet information from file.
 			BufferedReader reader = new BufferedReader(new FileReader(meets[index]));
 			
 			String name = reader.readLine();
@@ -224,14 +232,14 @@ public class Main
 			
 			List<String> runs = new ArrayList<String>();
 			String line = reader.readLine();
-			int test = 1;
+
 			while (line != null && !line.isEmpty())
 			{
 				runs.add(line);
 				line = reader.readLine();
 			}
 			
-			String scores = reader.readLine();
+			String results = reader.readLine();
 			String spreadComments = reader.readLine();
 			
 			String comments = reader.readLine();
@@ -241,124 +249,16 @@ public class Main
 				comments += "\n" + line;
 				line = reader.readLine();
 			}	
-				
-			Meet meet = new Meet(name, date, conditions, spreadComments, comments);
-			
 			reader.close();
-			reader = new BufferedReader(new FileReader(new File(folder + "\\Team Abreviations.txt")));
-			List<String> lines = new ArrayList<String>();
 			
-			line = reader.readLine();
-			while(line != null)
-			{
-				lines.add(line);
-				line = reader.readLine();
-			}
+			//Declaring object with stored data.
+			MeetSheet meet = new MeetSheet(name, date, conditions, spreadComments, comments);
+				
+			//Adding team scores.
+			meet.addResults(results);
 			
-			Team tempTeam;
-			List<Team> tempTeams = new ArrayList<Team>();
-			List<Integer> points = new ArrayList<Integer>();
-			
-			String[] split = separate(scores);
-			
-			for(int i = 0; i < split.length; i++)
-			{
-				String[] spliter = split[i].split("; ");
-				
-				for(int j = 0; j < spliter.length; j++)
-				{
-					String[] splitest = spliter[j].split("-");
-					
-					for(int k = 0; k < lines.size(); k++)
-					{
-						if(lines.get(k).contains(" " + splitest[0] + ","))
-						{
-							String teamName = lines.get(k).substring(0, lines.get(k).indexOf(':'));
-							System.out.println(teamName);
-							
-							for(int l = 0; l < teams.size(); l++)
-							{
-								if(teams.get(l).getName().equals(teamName))
-								{
-									tempTeam = teams.get(l);
-									tempTeam.addMeet(meet);
-									tempTeams.add(tempTeam);
-								}
-								else
-								{
-									tempTeam = new Team(teamName);
-									tempTeam.addMeet(meet);
-									tempTeams.add(tempTeam);
-									teams.add(tempTeam);
-								}
-							}
-						}
-					}
-					
-					points.add(Integer.parseInt(splitest[1]));
-				}
-				
-				meet.addResults(new Scores(tempTeams, points));
-			}
-			
-			String[] key = separate(runs.remove(0));
-			for(int i = 0; i < runs.size(); i++)
-			{
-				Time[] times = new Time[3];
-				int[] places = new int[3];
-				comments = "";
-				
-				int currentMile = 3;
-				split = separate(runs.get(i));
-				for(int j = 1; j < key.length; j++)
-				{
-					if(key[j] == "Mile 1")
-					{
-						times[0] = new Time(split[j]);
-						currentMile = 1;
-					}
-					else if(key[j] == "Mile 2")
-					{
-						times[1] = new Time(split[j]);
-						currentMile = 2;
-					}
-					else if(key[j] == "5k")
-					{
-						times[2] = new Time(split[j]);
-						currentMile = 3;
-					}
-					else if(key[j] == "Place")
-					{
-						places[currentMile - 1] = Integer.parseInt(split[j]);
-					}
-					else if(key[j] == "Fin. Place")
-					{
-						places[places.length - 1] = Integer.parseInt(split[j]);
-					}
-					else if(key[j] == "Comments")
-					{
-						comments = split[j];
-					}
-				}
-				
-				Runner runner = new Runner(name, team);
-				boolean newRunner = true;
-				for(int j = 0; j < team.getRunners().size(); j++)
-				{
-					if(team.getRunners().get(j).equals(name, year))
-					{
-						runner = team.getRunners().get(j);
-						newRunner = false;
-					}
-				}
-				if(newRunner)
-				{
-					team.addRunner(runner);
-				}
-	
-				
-				meet.addPerformance(new Run(meet, runner, times, i, places));
-			}	
+			//Adding individual Runs.
+			meet.addPerformances(runs, school, gender, year);
 			
 			return meet;
 		}
@@ -446,14 +346,14 @@ public class Main
 		}
 		return string;
 	}
-	
+
 	public static String removeTrailingCommas(String string)
 	{
-		while(string.charAt(string.length() - 1) == ',')
+		while (string.charAt(string.length() - 1) == ',')
 		{
 			string = string.substring(0, string.length() - 1);
 		}
-		
+
 		return string;
 	}
 }

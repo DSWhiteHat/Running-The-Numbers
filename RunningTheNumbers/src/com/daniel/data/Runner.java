@@ -6,16 +6,18 @@ import java.util.List;
 public class Runner
 {
 	private String name;
-	private Team team;
-	int gradYear;
-	private int[] years;
+	private int gradYear;
+	private List<School> schools;
+	private List<Team> teams;
 	private List<Run> performances;
 
-	public Runner(String name, Team team)
+	public Runner(String name, int gradYear)
 	{
 		this.name = name;
-		this.setTeam(team);
-		years = new int[4];
+		this.gradYear = gradYear;
+		
+		schools = new ArrayList<School>();
+		teams = new ArrayList<Team>();
 		performances = new ArrayList<Run>();
 	}
 
@@ -38,6 +40,7 @@ public class Runner
 	{
 		performances.add(performance);
 
+		/*
 		int year = Integer.parseInt((performance.getMeet().getDate().toString().split("/"))[2]);
 		
 		if(years[0] == 0)
@@ -46,9 +49,11 @@ public class Runner
 			gradYear = year + 5;
 		}
 		years[year - years[0]] = year;
+		*/
 	}
 
 	//Equal by name and years on the team.
+	/*
 	public boolean equals(String name, int year)
 	{
 		if(year >= gradYear - 4 && year < gradYear)
@@ -88,30 +93,21 @@ public class Runner
 		
 		return false;
 	}
-
+	*/
+	
 	public String getName()
 	{
 		return name;
 	}
 
-	public Team getTeam()
+	public List<Team> getTeams()
 	{
-		return team;
+		return teams;
 	}
 
-	public void setTeam(Team team)
+	public void setTeam(List<Team> teams)
 	{
-		this.team = team;
-	}
-
-	public int[] getYears()
-	{
-		return years;
-	}
-
-	public void setYears(int[] years)
-	{
-		this.years = years;
+		this.teams = teams;
 	}
 
 	public List<Run> getPerformances()

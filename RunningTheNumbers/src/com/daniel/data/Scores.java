@@ -1,31 +1,33 @@
+//Currently only for use in MeetSheets, Scores are not linked to Team objects, only school names.
+
 package com.daniel.data;
 
 import java.util.List;
 
 public class Scores
 {
-	private List<Team> teams;
+	private List<String> schools;
 	private List<Integer> scores;
 	
-	public Scores(List<Team> teams, List<Integer> scores)
+	public Scores(List<String> schools, List<Integer> scores)
 	{
-		this.teams = teams;
+		this.schools = schools;
 		this.scores = scores;
 	}
 	
 	public String toString()
 	{
-		String out = teams.get(0) + " (" + scores.get(0) + ")";
-		for(int i = 1; i < teams.size(); i++)
+		String out = schools.get(0) + " (" + scores.get(0) + ")";
+		for(int i = 1; i < schools.size(); i++)
 		{
-			out += " - " + teams.get(i) + " (" + scores.get(i) + ")";
+			out += " - " + schools.get(i) + " (" + scores.get(i) + ")";
 		}
 		return out;
 	}
 	
-	public List<Team> getTeams()
+	public List<String> getSchools()
 	{
-		return teams;
+		return schools;
 	}
 	
 	public List<Integer> getScores()

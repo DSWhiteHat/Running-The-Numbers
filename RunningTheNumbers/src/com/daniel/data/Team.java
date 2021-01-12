@@ -5,44 +5,59 @@ import java.util.List;
 
 public class Team
 {
+	//Identifying
 	private School school;
+	private String gender;
 	private int year;
-	private boolean boys;
-	private List<Meet> meets;
+	
+	//Content
+	private List<MeetSheet> meetSheets;
 	private List<Runner> runners;
 	
-	public Team(School school, int year, boolean boys)
+	public Team(School school, String gender, int year)
 	{
 		this.school = school;
+		this.gender = gender;
 		this.year = year;
-		this.boys = boys;
+		
+		meetSheets = new ArrayList<MeetSheet>();
+		runners = new ArrayList<Runner>();
+	}
+	
+	/*Super sus.
+	public Team(School school)
+	{
+		this.school = school;
+		this.year = -1;
+		this.boys = false;
 		meets = new ArrayList<Meet>();
 		runners = new ArrayList<Runner>();
 	}
+	*/
 
 	public School getSchool()
 	{
 		return school;
 	}
 
-	public void setName(School school)
+	public void setSchool(School school)
 	{
 		this.school = school;
 	}
 
-	public List<Meet> getMeets()
+	public List<MeetSheet> getMeetSheets()
 	{
-		return meets;
+		return meetSheets;
 	}
 
-	public void setMeets(List<Meet> meets)
+	public void setMeetSheets(List<MeetSheet> meetSheets)
 	{
-		this.meets = meets;
+		this.meetSheets = meetSheets;
 	}
 	
-	public void addMeet(Meet meet)
+	public void addMeet(MeetSheet meetSheet)
 	{
-		meets.add(meet);
+		meetSheets.add(meetSheet);
 	}
 
 	public List<Runner> getRunners()

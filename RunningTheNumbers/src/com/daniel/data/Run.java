@@ -4,21 +4,23 @@ import java.util.List;
 
 public class Run implements Comparable<Run>
 {
-	private Meet meet;
+	private MeetSheet meet;
 	private Runner runner;
+	private String comments;
 	
-	//Lists store times and places for splits and finish.
+	//Arrays store times and places for splits and finish.
 	private Time[] times;
 	private int teamPlace;
 	private int[] places;
 
-	public Run(Meet meet, Runner runner, Time[] times, int teamPlace, int[] places)
+	public Run(MeetSheet meet, Runner runner, Time[] times, int teamPlace, int[] places, String comments)
 	{
 		this.meet = meet;
 		this.runner = runner;
 		this.times = times;
 		this.teamPlace = teamPlace;
 		this.places = places;
+		this.comments = comments;
 	}
 
 	public int compareTo(Run other)
@@ -30,8 +32,22 @@ public class Run implements Comparable<Run>
 	{
 		return (compareTo(other) == 0);
 	}
+	
+	public String toString()
+	{
+		String out = runner.getName() + "\t\t";
 
-	public Meet getMeet()
+		for (int j = 0; j < times.length; j++)
+		{
+			out += times[j] + "\t" + places[j] + "\t";
+		}
+
+		out += teamPlace + "\t" + comments + "\n";
+		
+		return out;
+	}
+
+	public MeetSheet getMeet()
 	{
 		return meet;
 	}
@@ -83,5 +99,15 @@ public class Run implements Comparable<Run>
 		}
 		
 		return 0;
+	}
+	
+	public String getComments()
+	{
+		return comments;
+	}
+	
+	public void setComments(String comments)
+	{
+		this.comments = comments;
 	}
 }

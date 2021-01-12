@@ -10,8 +10,18 @@ public class Time implements Comparable<Time>
 	
 	public Time(String minuteSecond)
 	{
+		if(minuteSecond.isBlank() || minuteSecond.equals("?"))
+		{
+			this.minuteSecond = "?";
+			minuteDecimal = -1;
+		}
+		else
+		{
+		minuteSecond = minuteSecond.replaceAll(";", ":");
+		
 		this.minuteSecond = minuteSecond;
 		minuteDecimal = parseTime(minuteSecond);
+		}
 	}
 
 	public Time(float minuteDecimal)
@@ -45,6 +55,14 @@ public class Time implements Comparable<Time>
 	// (17.016666666).
 	public static float parseTime(String time)
 	{
+		/*
+		if(time.equals("DNF") || time.equals("DNR"))
+		{
+			return Float.MAX_VALUE;
+		}
+		else
+		{
+		*/
 		float formatted = 0.0f;
 
 		String minutes = time.split(":")[0];
@@ -54,6 +72,7 @@ public class Time implements Comparable<Time>
 		formatted += Float.parseFloat(seconds) / 60;
 
 		return formatted;
+		//}
 	}
 
 	public static Time average(List<Run> performances)
