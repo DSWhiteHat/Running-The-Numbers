@@ -35,7 +35,12 @@ public class School
 		return teams.get(gender).get(year - firstYears.get(gender));
 	}
 
-	public void addTeam(String gender, int year)
+	public void newTeam(String gender, int year)
+	{
+		addTeam(new Team(this, gender, year), gender, year);
+	}
+	
+	public void addTeam(Team team, String gender, int year)
 	{
 		List<Team> temp = teams.get(gender);
 
@@ -51,11 +56,11 @@ public class School
 
 		if(temp.get(index) == null)
 		{
-		    temp.set(index, new Team(this, gender, year));
+		    temp.set(index, team);
 		}
 		else
 		{
-		    temp.add(index, new Team(this, gender, year));
+		    temp.add(index, team);
 		}
 	}
 

@@ -93,7 +93,7 @@ public class MeetSheet
 	public void setPerformances(List<Run> performances)
 	{ this.performances = performances; }
 
-	public void addPerformances(List<String> performances, String school, String gender, int year)
+	public void addPerformances(Team team, List<String> performances, String school, String gender, int year)
 	{
 		String[] key = Main.separate(performances.remove(0));
 		for (int i = 0; i < performances.size(); i++)
@@ -147,6 +147,10 @@ public class MeetSheet
 					{
 						places[currentMile - 1] = Integer.MAX_VALUE - 1;
 					}
+					else if(split[j].contains("?"))
+					{
+						places[currentMile - 1] = Integer.MAX_VALUE - 2;
+					}
 					else
 					{
 						places[places.length - 1] = Integer.parseInt(split[j]);
@@ -161,13 +165,6 @@ public class MeetSheet
 			// Temporarily making meet year graduation year.
 			Runner runner = new Runner(name, year);
 			boolean newRunner = true;
-
-			if (Main.schools.get(school).getTeam(gender, year) == null)
-			{
-				Main.schools.get(school).addTeam(gender, year);
-			}
-			Team team = Main.schools.get(school).getTeam(gender, year);
-
 			for (int j = 0; j < team.getRunners().size(); j++)
 			{
 				if (team.getRunners().get(j).getName().equals(name))
@@ -207,32 +204,35 @@ public class MeetSheet
 		}
 
 		// Deciphering the team scores from the 'scores' line of the file.
-		String[] split = Main.separate(results);
-		
-		for (int i = 0; i < split.length; i++)
+		if (!results.isBlank())
 		{
-			List<String> schoolNames = new ArrayList<String>();
-			List<Integer> scores = new ArrayList<Integer>();
-			String[] spliter = split[i].split("; ");
-
-			for (int j = 0; j < spliter.length; j++)
-			{
-				String[] splitest = spliter[j].split("-");
-
-				for (int k = 0; k < lines.size(); k++)
-				{
-					// Finding which school the school abbreviations used in the meet sheet correspond to.
-					if (lines.get(k).contains(" " + splitest[0] + ","))
-					{
-						String schoolName = lines.get(k).substring(0, lines.get(k).indexOf(':'));
-						schoolNames.add(schoolName);
-					}
-				}
-
-				scores.add(Integer.parseInt(splitest[1]));
-			}
+			String[] split = Main.separate(results);
 			
-			this.results.add(new Scores(schoolNames, scores));
+			for (int i = 0; i < split.length; i++)
+			{
+				List<String> schoolNames = new ArrayList<String>();
+				List<Integer> scores = new ArrayList<Integer>();
+				String[] spliter = split[i].split("; ");
+	
+				for (int j = 0; j < spliter.length; j++)
+				{
+					String[] splitest = spliter[j].split("-");
+	
+					for (int k = 0; k < lines.size(); k++)
+					{
+						// Finding which school the school abbreviations used in the meet sheet correspond to.
+						if (lines.get(k).contains(" " + splitest[0] + ","))
+						{
+							String schoolName = lines.get(k).substring(0, lines.get(k).indexOf(':'));
+							schoolNames.add(schoolName);
+						}
+					}
+	
+					scores.add(Integer.parseInt(splitest[1]));
+				}
+				
+				this.results.add(new Scores(schoolNames, scores));
+			}
 		}
 	}
 

@@ -25,12 +25,12 @@ public class Page extends DrawnText
 	public void display()
 	{
 		getP().background(getC());
+		drawn.display();
+		
 		getP().stroke(getTextColor());
 		getP().textAlign(getP().CENTER, getP().TOP);
 		getP().textSize(getTextSize());
-		getP().text(title, getX() + getP().width / 2, getY());
-	
-		drawn.display();
+		//getP().text(title, getX() + getP().width / 2, getY()); BORING TEXT TITLE
 	}
 	
 	public AllDrawn getDrawn()
@@ -41,5 +41,10 @@ public class Page extends DrawnText
 	public void setDrawn(AllDrawn drawn)
 	{
 		this.drawn = drawn;
+	}
+	
+	public void addDrawn(Drawn drawn)
+	{
+		this.drawn.addDrawn(drawn);
 	}
 }

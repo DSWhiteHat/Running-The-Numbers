@@ -19,6 +19,8 @@ import com.daniel.data.Scores;
 import com.daniel.data.Team;
 import com.daniel.data.Time;
 
+import processing.core.PApplet;
+
 public class Main
 {
 	/*
@@ -29,21 +31,35 @@ public class Main
 
 	public static void main(String[] args) throws IOException
 	{
-		// PApplet.main("com.daniel.main.RunningTheNumbers");
+		PApplet.main("com.daniel.main.RunningTheNumbers");
 
 		// scrubNew(new File("Data\\Boys\\2011"));
+		/*
 		String schoolName = "Cedar Crest High School";
 		schools.put(schoolName, new School(schoolName));
 		schools.get(schoolName).addTeam("Boys", 2011);
 		System.out.println(load("Solanco", schoolName, "Boys", 2011));
-
+		*/
+		
 		/*
 		 * File meets = new File("Data/meets.csv"); scrub(meets); //System.out.println(query(performances, meets,
 		 * "McCaskey & Annville-Cleona @ Lancaster Catholic (Boys)", "9/7/2010")); System.out.println(query(performances, meets,
 		 * "1600 Time Trial (Boys)", "2010"));
 		 */
+		
+		/*
+		scrubNew(new File("Data/Cedar Crest High School/Girls/2011"));
+		schools.put("Cedar Crest High School", loadAll(new School("Cedar Crest High School")));
+		
+		List<MeetSheet> meets = schools.get("Cedar Crest High School").getTeam("Boys", 2011).getMeetSheets();
+		for (MeetSheet m : meets)
+		{
+			System.out.println("\n\n" + m);
+		}
+		*/
 	}
 
+	// Detects .csv files in the specified directory and scrubs them, converting them into .txt files.
 	public static void scrubNew(File directory) throws IOException
 	{
 		System.out.println("Checking for new files to scrub...");
@@ -197,16 +213,46 @@ public class Main
 
 		writer.close();
 	}
+	
+	// Loads all MeetSheets from the specified school.
+	public static School loadAll(School school) throws IOException
+	{
+		System.out.println("Loading all data for " + school.getName() + "...");
+		File[] genders = new File("Data/" + school.getName()).listFiles();
+		
+		for (File g : genders)
+		{
+			String gender = g.getName();
+			File[] years = g.listFiles();
+			for (File y : years)
+			{
+				int year = Integer.parseInt(y.getName());
+				Team team = new Team(school, gender, year);
+				File[] meets = y.listFiles();
+				for (File meet : meets)
+				{
+					if (meet.getName().contains(".txt"))
+					{
+						System.out.println("Loading meet: " + meet.getName());
+						load(team, meet.getName(), school.getName(), gender, year);
+					}
+				}
+				school.addTeam(team, gender, year);
+			}
+		}
+		
+		return school;
+	}
 
 	// Returns the MeetSheet specified by the query.
-	public static MeetSheet load(String query, String school, String gender, int year) throws IOException
+	public static void load(Team team, String query, String school, String gender, int year) throws IOException
 	{
-		//Navigate file system to correct folder.
+		// Navigate file system to correct folder.
 		File folder = new File("Data/" + school + "/" + gender + "/" + year);
 		File[] meets = folder.listFiles();
 		int index = -1;
 
-		//Search for specified meet in specified folder.
+		// Search for specified meet in specified folder.
 		for (int i = 0; i < meets.length; i++)
 		{
 			if (meets[i].getName().toLowerCase().contains(query.toLowerCase()) && meets[i].getName().contains(".txt"))
@@ -219,17 +265,16 @@ public class Main
 		if (index == -1)
 		{
 			System.out.println("Meet Not Found");
-			return null;
 		}
 		else
 		{
-			//Storing MeetSheet information from file.
+			// Storing MeetSheet information from file.
 			BufferedReader reader = new BufferedReader(new FileReader(meets[index]));
-			
+
 			String name = reader.readLine();
 			Date date = new Date(reader.readLine());
 			String conditions = reader.readLine();
-			
+
 			List<String> runs = new ArrayList<String>();
 			String line = reader.readLine();
 
@@ -238,29 +283,29 @@ public class Main
 				runs.add(line);
 				line = reader.readLine();
 			}
-			
+
 			String results = reader.readLine();
 			String spreadComments = reader.readLine();
-			
+
 			String comments = reader.readLine();
 			line = reader.readLine();
-			while(line != null)
+			while (line != null)
 			{
 				comments += "\n" + line;
 				line = reader.readLine();
-			}	
+			}
 			reader.close();
-			
-			//Declaring object with stored data.
+
+			// Declaring object with stored data.
 			MeetSheet meet = new MeetSheet(name, date, conditions, spreadComments, comments);
-				
-			//Adding team scores.
+
+			// Adding team scores.
 			meet.addResults(results);
+
+			// Adding individual Runs.
+			meet.addPerformances(team, runs, school, gender, year);
 			
-			//Adding individual Runs.
-			meet.addPerformances(runs, school, gender, year);
-			
-			return meet;
+			team.addMeet(meet);
 		}
 	}
 

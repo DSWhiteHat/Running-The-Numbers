@@ -7,7 +7,7 @@ This program is an interactive visualization tool for cross country team statist
 /*
 TODO:
 ~Button Class
-Year Class
+?Year Class
 ~Runner Class
 ~Date Class
 ~Meet Class
@@ -35,19 +35,24 @@ Remove spaces near semicolons as well.
 package com.daniel.main;
 
 import com.daniel.display.Runnable;
+
+import java.util.HashMap;
+
 import com.daniel.display.AllDrawn;
 import com.daniel.display.Button;
 import com.daniel.display.Drawn;
 import com.daniel.display.Graph;
+import com.daniel.display.Image;
 import com.daniel.display.Page;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class RunningTheNumbers extends PApplet
 {
-	// Overall window dimensions.
-	public static final int WIDTH = 1200;
-	public static final int HEIGHT = 800;
+	// Overall window dimensions. NEEDED???
+	public static int WIDTH = 1200;
+	public static int HEIGHT = 800;
 
 	// Coordinates of top-left corner of the performance chart.
 	public static final int CHARTX = 75;
@@ -71,7 +76,8 @@ public class RunningTheNumbers extends PApplet
 	public int elementColor = 0xff8f8f8f;
 	public int textColor = 0xffcccccc;
 
-	AllDrawn pages = new AllDrawn();
+	private HashMap<String, Page> pages = new HashMap<String, Page>();
+	private Page page;
 
 	/*
 	 * Light mode initial color scheme. boolean darkMode = false; color backgroundColor = #bbbbbb; color pageElementColor = #000000;
@@ -86,27 +92,33 @@ public class RunningTheNumbers extends PApplet
 	// Sets slightly less basic values of the sketch before it runs.
 	public void setup()
 	{
-		/*
+		/* Graph Stuff
 		 * drawn.addDrawn(new Button(100, HEIGHT - 125, this, 100, 25, elementColor, "Color Mode", 12, textColor, new Runnable() { public
 		 * void run() { switchColors(); } })); drawn.addDrawn(new Graph(CHARTX, CHARTY, this, WIDTH * CHARTX_MULTIPLIER, HEIGHT *
 		 * CHARTY_MULTIPLIER, elementColor, LABEL_SIZE, textColor));
 		 */
-
-		pages.addDrawn(new Page(0, 0, this, backgroundColor, TITLE_SIZE, textColor, "Running the Numbers", new AllDrawn()));
+		surface.setResizable(true);
+		pages.put("Main Menu", new Page(0, 0, this, backgroundColor, TITLE_SIZE, textColor, "Running the Numbers", new AllDrawn()));
+		page = pages.get("Main Menu");
+		
+		page.addDrawn(new Image(0, 0, this, loadImage("Data/Track.jpg"), 1, 1));
+		page.addDrawn(new Image(0, .075f, this, loadImage("Data/Blank Banner.png"), 1, .15f));
+		//page.addDrawn(new Image(0, 0, this, loadImage("Data/Running the Numbers.png"), 1, .2f));
 	}
 
 	// Ticks, displaying the current program page.
 	public void draw()
 	{
 		background(backgroundColor);
-		pages.update();
-		pages.display();
+
+		page.update();
+		page.display();
 	}
 
 	// TODO
 	public void mousePressed()
 	{
-		for (Drawn d : pages.getAllDrawn())
+		for (Drawn d : page.getDrawn().getAllDrawn())
 		{
 			if (d instanceof Button)
 			{
@@ -130,7 +142,7 @@ public class RunningTheNumbers extends PApplet
 			backgroundColor = 0xff202020;
 			textColor = 0xffffffff;
 		}
-
-		pages.setColors(elementColor, textColor);
+		
+		//Need to make pages retrieve global values for themselves.
 	}
 }

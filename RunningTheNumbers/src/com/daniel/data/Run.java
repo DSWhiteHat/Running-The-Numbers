@@ -70,7 +70,7 @@ public class Run implements Comparable<Run>
 	//Finishing time.
 	public Time getTime()
 	{
-		for(int i = times.length; i >= 0; i--)
+		for(int i = times.length - 1; i >= 0; i--)
 		{
 			if(times[i] != null)
 			{
